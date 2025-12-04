@@ -77,14 +77,14 @@ export function AppSidebar({ isMobile = false, onNavigate }: AppSidebarProps) {
 		Announcement: Inbox,
 		Community: PersonStanding,
 		Recruit: FileUser,
-		Events: PartyPopper
+		Events: PartyPopper,
 	};
 	const session = useSession();
 	const { data: categories, isLoading: isLoadingCategories } =
 		useCategories();
 
 	// If mobile, always expanded. If desktop, use open/hover state.
-	const expanded = isMobile ? true : (open || hovered);
+	const expanded = isMobile ? true : open || hovered;
 
 	const toggleCollapse = () => {
 		if (isMobile) return;
@@ -130,7 +130,9 @@ export function AppSidebar({ isMobile = false, onNavigate }: AppSidebarProps) {
 					<button
 						type="button"
 						onClick={toggleCollapse}
-						aria-label={!open ? 'Expand sidebar' : 'Collapse sidebar'}
+						aria-label={
+							!open ? 'Expand sidebar' : 'Collapse sidebar'
+						}
 						className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 bg-gray-200 hover:bg-gray-100 transition"
 					>
 						{expanded ? (
@@ -141,7 +143,7 @@ export function AppSidebar({ isMobile = false, onNavigate }: AppSidebarProps) {
 					</button>
 				</div>
 			)}
-			
+
 			{/* Mobile Header */}
 			{isMobile && (
 				<div className="flex items-center px-6 py-4 border-b border-gray-700 mb-2">
@@ -156,18 +158,6 @@ export function AppSidebar({ isMobile = false, onNavigate }: AppSidebarProps) {
 					<ul className={`space-y-1 ${expanded ? ' px-4' : 'px-0'}`}>
 						{isMobile && (
 							<>
-								<li>
-									<Link
-										href="/chat"
-										onClick={handleLinkClick}
-										className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-white hover:bg-gray-400 transition hover:scale-103 justify-start"
-									>
-										<span className="text-base">
-											<MessageCircle className="h-5 w-5 shrink-0" />
-										</span>
-										<span>Chat</span>
-									</Link>
-								</li>
 								<li>
 									<Link
 										href="/posts/create"
@@ -217,9 +207,13 @@ export function AppSidebar({ isMobile = false, onNavigate }: AppSidebarProps) {
 						</li>
 						<li>
 							<button
-								onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+								onClick={() =>
+									setIsCategoryOpen(!isCategoryOpen)
+								}
 								className={`flex items-center gap-2 rounded-md px-2 py-2 text-sm text-white bg-transparent hover:bg-gray-400 transition hover:scale-103 w-full cursor-pointer ${
-									expanded ? 'justify-between' : 'justify-center'
+									expanded
+										? 'justify-between'
+										: 'justify-center'
 								}`}
 							>
 								<div className="flex items-center gap-2">
@@ -230,7 +224,9 @@ export function AppSidebar({ isMobile = false, onNavigate }: AppSidebarProps) {
 								</div>
 								{expanded && (
 									<motion.span
-										animate={{ rotate: isCategoryOpen ? 180 : 0 }}
+										animate={{
+											rotate: isCategoryOpen ? 180 : 0,
+										}}
 										transition={{ duration: 0.2 }}
 										className="text-xs flex items-center"
 									>
@@ -246,11 +242,15 @@ export function AppSidebar({ isMobile = false, onNavigate }: AppSidebarProps) {
 									initial={{ height: 0, opacity: 0 }}
 									animate={{ height: 'auto', opacity: 1 }}
 									exit={{ height: 0, opacity: 0 }}
-									transition={{ duration: 0.2, ease: 'easeInOut' }}
+									transition={{
+										duration: 0.2,
+										ease: 'easeInOut',
+									}}
 									className="overflow-hidden"
 								>
 									{categories?.map((category) => {
-										const Icon = iconMenu[category.label] || Home;
+										const Icon =
+											iconMenu[category.label] || Home;
 
 										return (
 											<li key={category.id}>
@@ -286,7 +286,9 @@ export function AppSidebar({ isMobile = false, onNavigate }: AppSidebarProps) {
 													)}
 
 													{expanded && (
-														<span>{category.label}</span>
+														<span>
+															{category.label}
+														</span>
 													)}
 												</Link>
 											</li>
@@ -318,10 +320,14 @@ export function AppSidebar({ isMobile = false, onNavigate }: AppSidebarProps) {
 											? 'justify-start'
 											: 'justify-center'
 									}`}
-									aria-label={expanded ? undefined : item.title}
+									aria-label={
+										expanded ? undefined : item.title
+									}
 									title={!expanded ? item.title : undefined}
 								>
-									<span className="text-base">{item.icon}</span>
+									<span className="text-base">
+										{item.icon}
+									</span>
 									{expanded && <span>{item.title}</span>}
 								</Link>
 							</li>
@@ -354,11 +360,15 @@ export function AppSidebar({ isMobile = false, onNavigate }: AppSidebarProps) {
 												expanded ? undefined : link.aria
 											}
 											title={
-												!expanded ? link.title : undefined
+												!expanded
+													? link.title
+													: undefined
 											}
 										>
 											<link.icon className="h-4 w-4 shrink-0" />
-											{expanded && <span>{link.label}</span>}
+											{expanded && (
+												<span>{link.label}</span>
+											)}
 										</Link>
 									</li>
 								))}

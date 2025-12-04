@@ -47,7 +47,6 @@ import { toast } from 'sonner';
 import { useSidebar } from '../ui/sidebar';
 import { Button } from '../ui/button';
 import Link from 'next/link';
-import { getAISummary } from '@/services/n8n/aiSummary';
 import {
 	Carousel,
 	CarouselContent,
@@ -571,29 +570,6 @@ export default function PostDetail({ post, refresh }: PostDetailProps) {
 		}
 	};
 
-	const handleAISummary = async () => {
-		setIsLoadingAI(true);
-		try {
-			const response = await getAISummary(post.id);
-			setAiSummary(response.ai_summary);
-			setShowAISummary(true);
-			toast.success('AI Summary generated!', {
-				position: 'bottom-right',
-			});
-		} catch (error) {
-			const errorMessage =
-				error instanceof Error
-					? error.message
-					: 'Failed to generate AI summary';
-			toast.error(errorMessage, {
-				position: 'bottom-right',
-			});
-			console.error('AI Summary error:', error);
-		} finally {
-			setIsLoadingAI(false);
-		}
-	};
-
 	const handleSharePost = async () => {
 		try {
 			await navigator.clipboard.writeText(window.location.href);
@@ -799,117 +775,7 @@ export default function PostDetail({ post, refresh }: PostDetailProps) {
 						</div>
 					)}
 					<div>{post.body_md}</div>
-					{/* AI Summary Section */}
-					<div className="mt-4">
-						{!aiSummary ? (
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={handleAISummary}
-								disabled={isLoadingAI}
-								className="relative flex items-center gap-2 hover:bg-purple-50 hover:border-purple-300 hover:text-purple-700 transition-all overflow-hidden group"
-							>
-								<span className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30 group-hover:animate-shimmer" />
-								{isLoadingAI ? (
-									<>
-										<Loader2 className="w-4 h-4 animate-spin" />
-										<span>Generating...</span>
-									</>
-								) : (
-									<>
-										<Sparkles className="w-4 h-4 animate-pulse" />
-										<span>Generate AI Summary</span>
-									</>
-								)}
-							</Button>
-						) : (
-							<div className="space-y-2">
-								<div className="flex items-center gap-2">
-									<Button
-										variant="outline"
-										size="sm"
-										onClick={() =>
-											setShowAISummary(!showAISummary)
-										}
-										className="flex items-center gap-2 hover:bg-purple-50 hover:border-purple-300 hover:text-purple-700 transition-all cursor-pointer"
-									>
-										<Sparkles className="w-4 h-4" />
-										<span>
-											{showAISummary ? 'Hide' : 'Show'} AI
-											Summary
-										</span>
-										<ChevronDown
-											className={`w-4 h-4 transition-transform duration-300 ${
-												showAISummary
-													? 'rotate-180'
-													: 'rotate-0'
-											}`}
-										/>
-									</Button>
-									<Button
-										variant="outline"
-										size="sm"
-										onClick={handleAISummary}
-										disabled={isLoadingAI}
-										className="flex items-center gap-2 hover:bg-purple-50 hover:border-purple-300 hover:text-purple-700 transition-all cursor-pointer"
-									>
-										{isLoadingAI ? (
-											<>
-												<Loader2 className="w-4 h-4 animate-spin" />
-												<span>Regenerating...</span>
-											</>
-										) : (
-											<>
-												<Sparkles className="w-4 h-4" />
-												<span>Regenerate</span>
-											</>
-										)}
-									</Button>
-								</div>
 
-								<AnimatePresence>
-									{showAISummary && (
-										<motion.div
-											initial={{
-												opacity: 0,
-												height: 0,
-												y: -10,
-											}}
-											animate={{
-												opacity: 1,
-												height: 'auto',
-												y: 0,
-											}}
-											exit={{
-												opacity: 0,
-												height: 0,
-												y: -10,
-											}}
-											transition={{
-												duration: 0.3,
-												ease: 'easeInOut',
-											}}
-											className="overflow-hidden"
-										>
-											<div className="p-4 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg">
-												<div className="flex items-start gap-2">
-													<Sparkles className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
-													<div>
-														<p className="text-sm font-semibold text-purple-900 mb-1">
-															AI Summary
-														</p>
-														<p className="text-sm text-gray-700">
-															{aiSummary}
-														</p>
-													</div>
-												</div>
-											</div>
-										</motion.div>
-									)}
-								</AnimatePresence>
-							</div>
-						)}
-					</div>{' '}
 					{/* Post Actions */}
 					<div className="flex items-center gap-6 text-gray-600">
 						<div className="flex items-center gap-2">
