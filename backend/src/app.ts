@@ -3,7 +3,6 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
-import initRoute from './routes/init';
 import userRoute from './routes/user.route';
 import postRoute from './routes/post.route';
 import categoryRoutes from './routes/category.route';
@@ -35,7 +34,7 @@ app.use(cookieParser());
 app.get('/health', (_req, res) => res.json({ ok: true }));
 const apiV1 = express.Router();
 
-apiV1.use('/init', initRoute);
+
 apiV1.use('/user', userRoute);
 apiV1.use('/post', postRoute);
 apiV1.use('/categories', categoryRoutes);

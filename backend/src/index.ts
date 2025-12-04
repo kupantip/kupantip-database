@@ -1,7 +1,7 @@
 import { createServer } from 'http';
 import app from './app';
 import { env } from './config/env';
-import { initializeSocket } from './socket/chat.socket';
+
 
 app.get('/', (req, res) => {
 	res.send('Hello, World!');
@@ -10,12 +10,11 @@ app.get('/', (req, res) => {
 // Create HTTP server
 const httpServer = createServer(app);
 
-// Initialize Socket.IO
-initializeSocket(httpServer);
+
+
 
 const server = httpServer.listen(env.port, () => {
 	console.log(`API running on http://localhost:${env.port}`);
-	console.log(`Socket.IO server initialized`);
 });
 
 server.on('error', (error: NodeJS.ErrnoException) => {
