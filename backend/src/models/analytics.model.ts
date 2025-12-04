@@ -34,6 +34,11 @@ export const getPostProportionByCategory = async (): Promise<
 	return result.recordset;
 };
 
+export interface PeakActivityData {
+	name: string;
+	data: { x: string; y: number }[];
+}
+
 export const getMostActiveUsers = async (
 	limit: number = 10
 ): Promise<ActiveUserStats[]> => {
@@ -64,4 +69,54 @@ export const getMostActiveUsers = async (
 	`);
 
 	return result.recordset;
+};
+
+export const getPeakActivity = async (): Promise<PeakActivityData[]> => {
+	const pool = await getDbConnection();
+	const result = await pool.request().query(`
+		SELECT 
+			DATENAME(weekday, created_at) as day_name,
+			DATEPART(hour, created_at) as hour,
+			COUNT(*) as count
+		FROM (
+			SELECT created_at FROM [dbo].[post] WHERE deleted_at IS NULL
+			UNION ALL
+			SELECT created_at FROM [dbo].[comment] WHERE deleted_at IS NULL
+		) as activity
+		GROUP BY DATENAME(weekday, created_at), DATEPART(hour, created_at)
+	`);
+
+	const rawData = result.recordset;
+
+	// Initialize structure for all days and hours
+	const days = [
+		'Monday',
+		'Tuesday',
+		'Wednesday',
+		'Thursday',
+		'Friday',
+		'Saturday',
+		'Sunday',
+	];
+	
+	const response: PeakActivityData[] = days.map((day) => ({
+		name: day,
+		data: Array.from({ length: 24 }, (_, i) => ({
+			x: String(i).padStart(2, '0'),
+			y: 0,
+		})),
+	}));
+
+	// Fill in data
+	rawData.forEach((row: { day_name: string; hour: number; count: number }) => {
+		const dayIndex = days.indexOf(row.day_name);
+		if (dayIndex !== -1) {
+			const hourIndex = row.hour; // 0-23
+			if (hourIndex >= 0 && hourIndex < 24) {
+				response[dayIndex].data[hourIndex].y = row.count;
+			}
+		}
+	});
+
+	return response;
 };

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import {
 	getPostProportionByCategory,
 	getMostActiveUsers,
+	getPeakActivity,
 } from '../models/analytics.model';
 
 export const getPostProportionByCategoryController = async (
@@ -34,6 +35,19 @@ export const getMostActiveUsersController = async (
 		}
 
 		const data = await getMostActiveUsers(limit);
+		return res.status(200).json(data);
+	} catch (err) {
+		next(err);
+	}
+};
+
+export const getPeakActivityController = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const data = await getPeakActivity();
 		return res.status(200).json(data);
 	} catch (err) {
 		next(err);
