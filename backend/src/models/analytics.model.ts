@@ -120,3 +120,43 @@ export const getPeakActivity = async (): Promise<PeakActivityData[]> => {
 
 	return response;
 };
+
+export interface WordCloudData {
+	name: string;
+	size: number;
+}
+
+export const getInterestAndSkills = async (): Promise<WordCloudData[]> => {
+	const pool = await getDbConnection();
+
+	const result = await pool.request().query(`
+		SELECT interests, skills
+		FROM [dbo].[user_profile]
+	`);
+
+	const wordCounts: { [key: string]: number } = {};
+
+	result.recordset.forEach((row: { interests: string; skills: string }) => {
+		const text = `${row.interests || ''},${row.skills || ''}`;
+		// Split by common separators: comma, ideographic comma, space, newline
+		const words = text.split(/[,、\s\n]+/).map((w) => w.trim());
+
+		words.forEach((word) => {
+			if (word) {
+				const cleanWord = word; // Keep original case as per requirement/example? Example has Mixed Case.
+				if (cleanWord.length > 0) {
+					wordCounts[cleanWord] = (wordCounts[cleanWord] || 0) + 1;
+				}
+			}
+		});
+	});
+
+	const response: WordCloudData[] = Object.keys(wordCounts)
+		.map((key) => ({
+			name: key,
+			size: wordCounts[key],
+		}))
+		.sort((a, b) => b.size - a.size);
+
+	return response;
+};
