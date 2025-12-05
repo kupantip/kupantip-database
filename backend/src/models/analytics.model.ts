@@ -36,7 +36,7 @@ export const getPostProportionByCategory = async (): Promise<
 
 export interface PeakActivityData {
 	name: string;
-	data: { x: string; y: number }[];
+	data: { hour: string; engagement: number }[];
 }
 
 export const getMostActiveUsers = async (
@@ -102,8 +102,8 @@ export const getPeakActivity = async (): Promise<PeakActivityData[]> => {
 	const response: PeakActivityData[] = days.map((day) => ({
 		name: day,
 		data: Array.from({ length: 24 }, (_, i) => ({
-			x: String(i).padStart(2, '0'),
-			y: 0,
+			hour: String(i).padStart(2, '0'),
+			engagement: 0,
 		})),
 	}));
 
@@ -113,7 +113,7 @@ export const getPeakActivity = async (): Promise<PeakActivityData[]> => {
 		if (dayIndex !== -1) {
 			const hourIndex = row.hour; // 0-23
 			if (hourIndex >= 0 && hourIndex < 24) {
-				response[dayIndex].data[hourIndex].y = row.count;
+				response[dayIndex].data[hourIndex].engagement = row.count;
 			}
 		}
 	});
