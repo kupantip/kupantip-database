@@ -13,7 +13,7 @@ import Link from 'next/link';
 import ProfileDropDown from '@/components/ProfileDropdown';
 import { Loader2 } from 'lucide-react';
 import SearchBar from '@/components/SearchBar';
-import { useTotalUnreadCount } from '@/hooks/useTotalUnreadCount';
+
 import {
 	Sheet,
 	SheetContent,
@@ -29,7 +29,7 @@ export default function DashboardLayout({
 }) {
 	const { data: session, status } = useSession();
 	const [isRedirectLoading, setIsRedirectLoading] = useState(false);
-	const totalUnread = useTotalUnreadCount();
+
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
 	return (
@@ -83,17 +83,6 @@ export default function DashboardLayout({
 					</div>
 
 					<div className="flex items-center gap-2 md:gap-3 shrink-0">
-						<Link href="/chat" className="hidden md:block">
-							<div className="relative w-7 h-7 bg-transparent rounded-full flex items-center justify-center hover:bg-grey-1 hover:scale-105 transition-transform">
-								<MessageCircle className="w-5 h-5 text-white cursor-pointer" />
-								{totalUnread > 0 && (
-									<span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 min-w-4 flex items-center justify-center px-1">
-										{totalUnread > 99 ? '99+' : totalUnread}
-									</span>
-								)}
-							</div>
-						</Link>
-
 						<div className="hidden md:flex gap-2">
 							<Link href="/posts/create-category">
 								<Button className="group bg-transparent text-white hover:bg-white/10 flex items-center gap-2 cursor-pointer transition-all">
