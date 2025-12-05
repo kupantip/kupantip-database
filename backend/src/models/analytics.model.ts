@@ -14,6 +14,16 @@ export interface ActiveUserStats {
 	rank: number;
 }
 
+export interface WordCloudData {
+	name: string;
+	size: number;
+}
+
+export interface DailyActivitySeries {
+	id: string; // 'post' | 'comment'
+	data: { x: string; y: number }[];
+}
+
 export const getPostProportionByCategory = async (): Promise<
 	CategoryProportion[]
 > => {
@@ -121,10 +131,7 @@ export const getPeakActivity = async (): Promise<PeakActivityData[]> => {
 	return response;
 };
 
-export interface WordCloudData {
-	name: string;
-	size: number;
-}
+
 
 export const getInterestAndSkills = async (): Promise<WordCloudData[]> => {
 	const pool = await getDbConnection();
@@ -159,4 +166,49 @@ export const getInterestAndSkills = async (): Promise<WordCloudData[]> => {
 		.sort((a, b) => b.size - a.size);
 
 	return response;
+};
+
+export const getPostVsCommentStats = async (
+	days: number = 30
+): Promise<DailyActivitySeries[]> => {
+	const pool = await getDbConnection();
+
+	const result = await pool.request().input('days', sql.Int, days).query(`
+		WITH DateRange AS (
+			SELECT CAST(DATEADD(day, -number, CAST(GETDATE() AS DATE)) AS DATE) AS date
+			FROM master..spt_values
+			WHERE type = 'P' AND number BETWEEN 0 AND @days - 1
+		),
+		PostCounts AS (
+			SELECT CAST(created_at AS DATE) as date, COUNT(*) as count
+			FROM [dbo].[post]
+			WHERE deleted_at IS NULL
+			GROUP BY CAST(created_at AS DATE)
+		),
+		CommentCounts AS (
+			SELECT CAST(created_at AS DATE) as date, COUNT(*) as count
+			FROM [dbo].[comment]
+			WHERE deleted_at IS NULL
+			GROUP BY CAST(created_at AS DATE)
+		)
+		SELECT 
+			CONVERT(VARCHAR(10), dr.date, 105) as date_str, -- DD-MM-YYYY
+			dr.date,
+			COALESCE(pc.count, 0) as post_count,
+			COALESCE(cc.count, 0) as comment_count
+		FROM DateRange dr
+		LEFT JOIN PostCounts pc ON dr.date = pc.date
+		LEFT JOIN CommentCounts cc ON dr.date = cc.date
+		ORDER BY dr.date ASC
+	`);
+
+	const postSeries: DailyActivitySeries = { id: 'post', data: [] };
+	const commentSeries: DailyActivitySeries = { id: 'comment', data: [] };
+
+	result.recordset.forEach((row) => {
+		postSeries.data.push({ x: row.date_str, y: row.post_count });
+		commentSeries.data.push({ x: row.date_str, y: row.comment_count });
+	});
+
+	return [postSeries, commentSeries];
 };

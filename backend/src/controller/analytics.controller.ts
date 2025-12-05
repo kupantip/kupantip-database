@@ -4,6 +4,7 @@ import {
 	getMostActiveUsers,
 	getPeakActivity,
 	getInterestAndSkills,
+	getPostVsCommentStats,
 } from '../models/analytics.model';
 
 export const getPostProportionByCategoryController = async (
@@ -13,6 +14,30 @@ export const getPostProportionByCategoryController = async (
 ) => {
 	try {
 		const data = await getPostProportionByCategory();
+		return res.status(200).json(data);
+	} catch (err) {
+		next(err);
+	}
+};
+
+
+export const getPostVsCommentStatsController = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const ranges = req.query.ranges;
+		let days = 30; // Default
+
+		if (ranges) {
+			const parsedDays = parseInt(String(ranges), 10);
+			if (!isNaN(parsedDays) && parsedDays > 0) {
+				days = parsedDays;
+			}
+		}
+
+		const data = await getPostVsCommentStats(days);
 		return res.status(200).json(data);
 	} catch (err) {
 		next(err);
