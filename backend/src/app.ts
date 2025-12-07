@@ -17,6 +17,7 @@ import statsRoutes from './routes/stats.route';
 import announcementRoute from './routes/announcement.route';
 import searchRoute from './routes/search.route';
 import userProfileRoutes from './routes/userProfile.routes';
+import analyticsRoutes from './routes/analytics.route';
 import * as z from 'zod';
 
 const app = express();
@@ -34,6 +35,7 @@ app.use(cookieParser());
 app.get('/health', (_req, res) => res.json({ ok: true }));
 const apiV1 = express.Router();
 
+
 apiV1.use('/user', userRoute);
 apiV1.use('/post', postRoute);
 apiV1.use('/categories', categoryRoutes);
@@ -48,6 +50,7 @@ apiV1.use('/stats', statsRoutes);
 apiV1.use('/announcement', announcementRoute);
 apiV1.use('/search', searchRoute);
 apiV1.use('/profile', userProfileRoutes);
+apiV1.use('/analytics', analyticsRoutes);
 
 app.use('/api/v1', apiV1);
 
