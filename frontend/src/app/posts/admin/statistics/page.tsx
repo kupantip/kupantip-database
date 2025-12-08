@@ -16,26 +16,67 @@ export default function StatisticsPage() {
 	return (
 		<div
 			data-aos="fade-up"
-			className="space-y-4 bg-gray-100 p-5 rounded-lg"
+			className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8"
 		>
-			<div className="text-3xl font-bold text-green-1">Stats Page</div>
-			<div className="grid grid-cols-2 gap-10">
-				<div className="w-full bg-gray-200">
-					<div className="text-xl font-semibold">Graph 1: Table</div>
+			<div className="mb-8">
+				<h1 className="text-4xl font-bold text-gray-800 mb-2">
+					Analytics Dashboard
+				</h1>
+				<p className="text-gray-600">
+					Overview of platform statistics and insights
+				</p>
+			</div>
+
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+				{/* Graph 1 */}
+				<div className="bg-white rounded-xl shadow-md p-6 h-[400px] flex flex-col hover:shadow-lg transition-shadow">
+					<h2 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-3">
+						📊 User Activity
+					</h2>
+					<div className="flex-1 flex items-center justify-center text-gray-400">
+						Chart coming soon
+					</div>
 				</div>
-				<div className="w-full bg-gray-200">
-					<div className="text-xl font-semibold">Graph 2: Table</div>
-				</div>{' '}
-				<div className="w-full bg-gray-200">
-					<div className="text-xl font-semibold">Graph 3: Table</div>
+
+				{/* Graph 2 */}
+				<div className="bg-white rounded-xl shadow-md p-6 h-[400px] flex flex-col hover:shadow-lg transition-shadow">
+					<h2 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-3">
+						📈 Post Trends
+					</h2>
+					<div className="flex-1 flex items-center justify-center text-gray-400">
+						Chart coming soon
+					</div>
 				</div>
-				<div className="w-full bg-gray-200">
-					<div className="text-xl font-semibold">Graph 4: Table</div>
-				</div>{' '}
-				<div className="w-full bg-gray-200">
-					<div className="text-xl font-semibold">Graph 5: PieChart</div>
-                    <div><PieChart/></div>
-				</div>{' '}
+
+				{/* Graph 3 */}
+				<div className="bg-white rounded-xl shadow-md p-6 h-[400px] flex flex-col hover:shadow-lg transition-shadow">
+					<h2 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-3">
+						💬 Comment Statistics
+					</h2>
+					<div className="flex-1 flex items-center justify-center text-gray-400">
+						Chart coming soon
+					</div>
+				</div>
+
+				{/* Graph 4 */}
+				<div className="bg-white rounded-xl shadow-md p-6 h-[400px] flex flex-col hover:shadow-lg transition-shadow">
+					<h2 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-3">
+						⭐ Engagement Metrics
+					</h2>
+					<div className="flex-1 flex items-center justify-center text-gray-400">
+						Chart coming soon
+					</div>
+				</div>
+
+				{/* Graph 5 - PieChart */}
+				<div className="bg-white rounded-xl shadow-md p-6 h-[400px] flex flex-col hover:shadow-lg transition-shadow">
+					<h2 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-3">
+						🥧 Category Distribution
+					</h2>
+					<div className="flex-1 flex items-center justify-center">
+						<PieChart />
+					</div>
+				</div>
 			</div>
 		</div>
 	);
