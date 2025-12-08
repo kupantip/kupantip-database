@@ -19,6 +19,7 @@ import {
 	CirclePlus,
 	ChevronDown,
 	ChevronRight,
+	ChartNoAxesCombined,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -59,6 +60,13 @@ const adminLinks = [
 		label: 'Announcement Timeline',
 		aria: 'Announcement Timeline',
 		title: 'Announcement Timeline',
+	},
+	{
+		href: '/posts/admin/statistics',
+		icon: ChartNoAxesCombined,
+		label: 'Analytics Dashboard',
+		aria: 'Analytics Dashboard',
+		title: 'Analytics Dashboard',
 	},
 ];
 
