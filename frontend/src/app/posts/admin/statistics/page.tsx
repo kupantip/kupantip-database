@@ -7,6 +7,7 @@ import PieChart from '@/components/admin/statistics/PieChart';
 import HeatMap from '@/components/admin/statistics/HeatMap';
 import MultiLineChart from '@/components/admin/statistics/MultiLineChart';
 import TopUsersTable from '@/components/admin/statistics/TopUserTable';
+import InterestSkillsWordCloud from '@/components/admin/statistics/WordCloud';
 import { Trophy } from 'lucide-react';
 
 export default function StatisticsPage() {
@@ -64,10 +65,13 @@ export default function StatisticsPage() {
 				{/* Graph 3 */}
 				<div className="bg-white rounded-xl shadow-md p-6 h-[420px] flex flex-col hover:shadow-lg transition-shadow">
 					<h2 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-3">
-						💬 Graph 3
+						💬 User Interest & Skills Word Cloud
 					</h2>
-					<div className="flex-1 flex items-center justify-center text-gray-400">
-						Chart coming soon
+					<p className="text-sm text-gray-600 mb-3">
+						Visual representation of aggregated user interests and skills. The size of each word reflects its frequency and overall relevance in user discussions.
+					</p>
+					<div className="flex-1 min-h-[280px] relative">
+						<InterestSkillsWordCloud/>
 					</div>
 				</div>
 
