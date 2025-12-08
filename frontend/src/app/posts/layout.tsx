@@ -13,6 +13,7 @@ import Link from 'next/link';
 import ProfileDropDown from '@/components/ProfileDropdown';
 import { Loader2 } from 'lucide-react';
 import SearchBar from '@/components/SearchBar';
+
 import {
 	Sheet,
 	SheetContent,
@@ -28,6 +29,7 @@ export default function DashboardLayout({
 }) {
 	const { data: session, status } = useSession();
 	const [isRedirectLoading, setIsRedirectLoading] = useState(false);
+
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
 	return (
