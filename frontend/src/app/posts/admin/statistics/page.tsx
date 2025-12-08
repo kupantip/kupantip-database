@@ -6,6 +6,8 @@ import 'aos/dist/aos.css';
 import PieChart from '@/components/admin/statistics/PieChart';
 import HeatMap from '@/components/admin/statistics/HeatMap';
 import MultiLineChart from '@/components/admin/statistics/MultiLineChart';
+import TopUsersTable from '@/components/admin/statistics/TopUserTable';
+import { Trophy } from 'lucide-react';
 
 export default function StatisticsPage() {
 	useEffect(() => {
@@ -47,11 +49,15 @@ export default function StatisticsPage() {
 
 				{/* Graph 2 */}
 				<div className="bg-white rounded-xl shadow-md p-6 h-[420px] flex flex-col hover:shadow-lg transition-shadow">
-					<h2 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-3">
-						📈 Graph 2
+					<h2 className="flex items-center gap-2 text-xl font-semibold text-gray-800 mb-4 border-b pb-3">
+						<Trophy className="w-5 h-5 text-yellow-500" />
+                        Top Contributors
 					</h2>
+					<p className="text-sm text-gray-600 mb-3">
+						Ranking users by their total engagement (posts & comments).
+					</p>
 					<div className="flex-1 flex items-center justify-center text-gray-400">
-						Chart coming soon
+						<TopUsersTable/>
 					</div>
 				</div>
 
