@@ -57,9 +57,14 @@ export default function MultiLineChart() {
 		});
 	});
 
-	const chartData = Array.from(dateMap.values()).sort(
-		(a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-	);
+	const chartData = Array.from(dateMap.values()).sort((a, b) => {
+		// Parse d-m-year format like "1-11-2025"
+		const [dayA, monthA, yearA] = a.date.split('-').map(Number);
+		const [dayB, monthB, yearB] = b.date.split('-').map(Number);
+		const dateA = new Date(yearA, monthA - 1, dayA);
+		const dateB = new Date(yearB, monthB - 1, dayB);
+		return dateA.getTime() - dateB.getTime();
+	});
 
 	return (
 		<div className="w-full h-full flex flex-col">
@@ -99,10 +104,14 @@ export default function MultiLineChart() {
 							dataKey="date"
 							tick={{ fontSize: 12 }}
 							tickFormatter={(value) => {
-								const date = new Date(value);
-								return `${
-									date.getMonth() + 1
-								}/${date.getDate()}`;
+								if (!value) return '';
+								// Parse d-m-year format like "1-11-2025"
+								const parts = value.split('-');
+								if (parts.length === 3) {
+									const [day, month, year] = parts;
+									return `${month}/${day}`;
+								}
+								return value;
 							}}
 						/>
 						<YAxis tick={{ fontSize: 12 }} />
@@ -113,8 +122,17 @@ export default function MultiLineChart() {
 								borderRadius: '8px',
 							}}
 							labelFormatter={(value) => {
-								const date = new Date(value);
-								return date.toLocaleDateString();
+								if (!value) return '';
+								// Parse d-m-year format like "1-11-2025"
+								const parts = String(value).split('-');
+								if (parts.length === 3) {
+									const [day, month, year] = parts;
+									return `${day.padStart(
+										2,
+										'0'
+									)}-${month.padStart(2, '0')}-${year}`;
+								}
+								return value;
 							}}
 						/>
 						<Legend
